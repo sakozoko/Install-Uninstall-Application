@@ -6,4 +6,9 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Regisrty\" />
+    <Folder Include="ViewModels\Base\" />
+  </ItemGroup>
+
 </Project>

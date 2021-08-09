@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace URApplication
+namespace URApplication.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
