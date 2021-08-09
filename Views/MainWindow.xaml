@@ -18,7 +18,8 @@
         </Grid.RowDefinitions>
         <Border Grid.Row="0" x:Name="Panel" Height="30" Width="auto" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="1"/>
 
-        <DataGrid Grid.Row="1" ItemsSource="{Binding Rows}" AutoGenerateColumns="False">
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Rows}" AutoGenerateColumns="False"
+                  SelectionMode="Single" SelectedItem="{Binding SelectedRow}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Имя" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Издатель" Binding="{Binding Publisher}"/>
@@ -27,5 +28,5 @@
                 <DataGridTextColumn Header="Версия" Binding="{Binding Version}"/>
             </DataGrid.Columns>
         </DataGrid>
-    </Grid>
+        </Grid>
 </Window>
