@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Windows.Documents;
 using Microsoft.Win32;
 using URApplication.Models.ApplicationModels;
 
@@ -16,58 +18,36 @@ namespace URApplication.Models.Registry
 
         public ObservableCollection<ApplicationModel> GetApps()
         {
-            var i = 0;
-            string[] subKeyNames;
-            string path = UninstallInLocalMachineWow6432;
-            ObservableCollection<ApplicationModel> applicationModelCollection = new ObservableCollection<ApplicationModel>();
-            do
+            var registryKeys = new List<RegistryKey>
             {
-                using (var keyParent = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(path))
-                {
-                    subKeyNames = keyParent?.GetSubKeyNames();
-                }
-
-                applicationModelCollection =
-                    GetAppsFromLocalMachine(subKeyNames,path, applicationModelCollection);
-                path = UninstallInLocalMachine;
-                i++;
-            } while (i < 2);
-            
-            using (var keyParent = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(UninstallInCurrentUser))
-            {
-                subKeyNames = keyParent?.GetSubKeyNames();
-            }
-            foreach (var subKeyName in subKeyNames)
-            {
-                using var key =
-                    Microsoft.Win32.Registry.CurrentUser.OpenSubKey(UninstallInLocalMachine + @"\" + subKeyName);
-                {
-                    if(Validation.Application(key))
-                        applicationModelCollection.Add(new AppModel()
-                        {
-                            Name = (string)key.GetValue("DisplayName"),
-                        });
-
-                }
-            }
+                Microsoft.Win32.Registry.LocalMachine.OpenSubKey(UninstallInLocalMachineWow6432),
+                Microsoft.Win32.Registry.LocalMachine.OpenSubKey(UninstallInLocalMachine),
+                Microsoft.Win32.Registry.CurrentUser.OpenSubKey(UninstallInCurrentUser)
+            };
+            var applicationModelCollection = GetAppsFromRegistry(registryKeys);
+       
             return applicationModelCollection;
         }
-        private static ObservableCollection<ApplicationModel> GetAppsFromLocalMachine(string[] folderNames, string path,
-            ObservableCollection<ApplicationModel> applicationModelCollection)
+        private static ObservableCollection<ApplicationModel> GetAppsFromRegistry(List<RegistryKey> registryKeys)
         {
-            foreach (var subKeyName in folderNames)
+            var applicationModelCollection = new ObservableCollection<ApplicationModel>();
+            foreach (var keyParent in registryKeys)
             {
-                using var key =
-                    Microsoft.Win32.Registry.LocalMachine.OpenSubKey(path + @"\" + subKeyName);
+                using (keyParent)
                 {
-                    if(Validation.Application(key))
-                        applicationModelCollection.Add(new AppModel()
-                        {
-                            Name = (string)key.GetValue("DisplayName"),
-                            InstallDate = (string)key.GetValue("InstallDate")
-                        });
-
+                    var subKeyNames = keyParent?.GetSubKeyNames();
+                    foreach (var subKeyName in subKeyNames)
+                    {
+                        using var key = keyParent.OpenSubKey(subKeyName);
+                        if (Validation.Application(key))
+                            applicationModelCollection.Add(new AppModel()
+                            {
+                                Name = (string)key.GetValue("DisplayName"),
+                            });
+                    }
                 }
+
+
             }
 
             return applicationModelCollection;
