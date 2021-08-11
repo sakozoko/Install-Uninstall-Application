@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using Microsoft.Win32;
 using URApplication.Models.ApplicationModels;
 
 namespace URApplication.Models.Registry
@@ -41,13 +42,11 @@ namespace URApplication.Models.Registry
                 using var key =
                     Microsoft.Win32.Registry.CurrentUser.OpenSubKey(UninstallInLocalMachine + @"\" + subKeyName);
                 {
-                    if (key.GetValue("DisplayName") is null || key.GetValue("ParentKeyName") is not null) continue;
-                    if (key.GetValue("SystemComponent") is not null &&
-                        (int)key.GetValue("SystemComponent") == 1) continue;
-                    applicationModelCollection.Add(new AppModel()
-                    {
-                        Name = (string)key.GetValue("DisplayName"),
-                    });
+                    if(Validation.Application(key))
+                        applicationModelCollection.Add(new AppModel()
+                        {
+                            Name = (string)key.GetValue("DisplayName"),
+                        });
 
                 }
             }
@@ -61,19 +60,18 @@ namespace URApplication.Models.Registry
                 using var key =
                     Microsoft.Win32.Registry.LocalMachine.OpenSubKey(path + @"\" + subKeyName);
                 {
-                    if (key.GetValue("DisplayName") is null || key.GetValue("ParentKeyName") is not null) continue;
-                    if (key.GetValue("SystemComponent") is not null &&
-                        (int)key.GetValue("SystemComponent") == 1) continue;
-                    applicationModelCollection.Add(new AppModel()
-                    {
-                        Name = (string)key.GetValue("DisplayName"),
-                        InstallDate = (string)key.GetValue("InstallDate")
-                    });
+                    if(Validation.Application(key))
+                        applicationModelCollection.Add(new AppModel()
+                        {
+                            Name = (string)key.GetValue("DisplayName"),
+                            InstallDate = (string)key.GetValue("InstallDate")
+                        });
 
                 }
             }
 
             return applicationModelCollection;
         }
+
     }
 }
