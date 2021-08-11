@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using System.Windows.Controls;
-using URApplication.Models;
+using URApplication.Models.ApplicationModels;
 using URApplication.Models.Registry;
 using URApplication.ViewModels.Base;
 
@@ -8,16 +7,6 @@ namespace URApplication.ViewModels
 {
     internal class MainWindowViewModel: ViewModel
     {
-        public ObservableCollection<ApplicationModel> TempMethod()
-        {
-            var temp = new ObservableCollection<ApplicationModel>
-            {
-                new ApplicationModel(),
-                new ApplicationModel(),
-                new ApplicationModel()
-            };
-            return temp;
-        }
 
         public ObservableCollection<ApplicationModel> Rows { get; set; }
         private ApplicationModel _selectedModel;
@@ -28,7 +17,7 @@ namespace URApplication.ViewModels
         }
         public MainWindowViewModel()
         {
-            Rows = new ObservableCollection<ApplicationModel>(Class1.GetApps());
+            Rows = new ObservableCollection<ApplicationModel>(new RegistryApps().GetApps());
         }
     }
 }
