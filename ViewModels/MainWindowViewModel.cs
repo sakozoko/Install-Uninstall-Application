@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using URApplication.Models.ApplicationModels;
+using URApplication.Models;
 using URApplication.Models.Registry;
 using URApplication.ViewModels.Base;
 
@@ -17,7 +17,8 @@ namespace URApplication.ViewModels
         }
         public MainWindowViewModel()
         {
-            Rows = new ObservableCollection<ApplicationModel>(new RegistryApps().GetApps());
+            ICreatorApplications creator = new RegistryApps();
+            Rows = new ObservableCollection<ApplicationModel>(creator.GetApps());
         }
     }
 }

@@ -1,9 +1,8 @@
 ﻿using System.Collections.ObjectModel;
-using URApplication.Models.ApplicationModels;
 
 namespace URApplication.Models.Registry
 {
-    public interface ICreatorApplication
+    public interface ICreatorApplications
     {
         public ObservableCollection<ApplicationModel> GetApps();
     }

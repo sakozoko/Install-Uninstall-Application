@@ -8,9 +8,9 @@ namespace URApplication.ViewModels.Base
         public event PropertyChangedEventHandler PropertyChanged;
 
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string PropertyName=null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName=null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(PropertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
