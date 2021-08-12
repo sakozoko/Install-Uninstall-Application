@@ -17,10 +17,17 @@
             <RowDefinition Height="202*"/>
         </Grid.RowDefinitions>
         <Border Grid.Row="0" x:Name="Panel" Height="30" Width="auto" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="1"/>
-
         <DataGrid Grid.Row="1" ItemsSource="{Binding Rows}" AutoGenerateColumns="False"
                   SelectionMode="Single" SelectedItem="{Binding SelectedRow}" IsReadOnly="True" >
             <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Image" Width="SizeToCells"
+                                        IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding IconSource}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Имя" Binding="{Binding Name}">
 
                 </DataGridTextColumn>

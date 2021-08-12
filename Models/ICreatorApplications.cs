@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace URApplication.Models.Registry
+namespace URApplication.Models
 {
     public interface ICreatorApplications
     {
