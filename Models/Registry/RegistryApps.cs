@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
@@ -64,27 +65,53 @@ namespace URApplication.Models.Registry
                             Bitmap myBitmap = new Bitmap(1,1);
                             if(path is not null)
                             {
-                                path = path?.Trim('"');
+                                path = path.Trim('"');
                                 //Icon icon = new(path);
                                 if (path.EndsWith(".EXE", StringComparison.OrdinalIgnoreCase) ||
                                     path.EndsWith(".ICO", StringComparison.OrdinalIgnoreCase))
                                 {
+                                    try
+                                    {
+                                        myBitmap = new Bitmap(Icon.ExtractAssociatedIcon(path)
+                                            .ToBitmap());
+                                    }
+                                    catch (System.IO.FileNotFoundException)
+                                    {
+                                        myBitmap = new Bitmap(
+                                                Extract("C:\\Windows\\System32\\imageres.dll", 12, true)
+                                                    .ToBitmap());
+                                    }
                                 }
-                                else
+                                else if (path[..^2].EndsWith(".DLL", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    int de = path.LastIndexOf(',')+1;
+                                    int index = int.Parse(path[de..]);
+                                    path = path[..^2];
+                                    try
+                                    {
+                                        myBitmap = new Bitmap(Extract(path, index, true)
+                                            .ToBitmap());
+                                    }
+                                    catch (System.IO.FileNotFoundException)
+                                    {
+                                        myBitmap = new Bitmap(Extract("C:\\Windows\\System32\\imageres.dll", 12, true)
+                                            .ToBitmap());
+                                    }
+                                }else if (path[..^2].EndsWith(".EXE", StringComparison.OrdinalIgnoreCase))
                                 {
                                     path = path[..^2];
+                                    try
+                                    {
+                                        myBitmap = new Bitmap(Icon.ExtractAssociatedIcon(path)
+                                            .ToBitmap());
+                                    }
+                                    catch (System.IO.FileNotFoundException)
+                                    {
+                                        myBitmap = new Bitmap(Extract("C:\\Windows\\System32\\imageres.dll", 12, true)
+                                            .ToBitmap());
+                                    }
                                 }
 
-                                try
-                                {
-                                    myBitmap = new Bitmap(Icon.ExtractAssociatedIcon(path)
-                                        .ToBitmap());
-                                }
-                                catch (System.IO.FileNotFoundException)
-                                {
-                                    myBitmap = new Bitmap(Extract("C:\\Windows\\System32\\imageres.dll", 12, true)
-                                        .ToBitmap());
-                                }
                             }
                             else if(key.GetValue("WindowsInstaller") is not null)
                             {
@@ -98,8 +125,10 @@ namespace URApplication.Models.Registry
                                             (string)myiconKey.GetValue("ProductName")) continue;
                                         try
                                         {
-                                            myBitmap = new Bitmap(Icon.ExtractAssociatedIcon((string)myiconKey.GetValue("ProductIcon")??"asd")
+                                            if(myiconKey.GetValue("ProductIcon") is not null)
+                                                myBitmap = new Bitmap(Icon.ExtractAssociatedIcon((string)myiconKey.GetValue("ProductIcon"))
                                                 .ToBitmap());
+                                            break;
                                         }
                                         catch (System.IO.FileNotFoundException )
                                         {
