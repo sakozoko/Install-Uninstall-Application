@@ -62,7 +62,8 @@ namespace URApplication.Models.Registry
                         if (Validation.Application(key))
                         {
                             string path = (string)key.GetValue("DisplayIcon");
-                            Bitmap myBitmap = new Bitmap(1,1);
+                            Bitmap myBitmap = new Bitmap(Extract("C:\\Windows\\System32\\imageres.dll", 11, true)
+                                .ToBitmap());
                             if(path is not null)
                             {
                                 path = path.Trim('"');
@@ -78,7 +79,7 @@ namespace URApplication.Models.Registry
                                     catch (System.IO.FileNotFoundException)
                                     {
                                         myBitmap = new Bitmap(
-                                                Extract("C:\\Windows\\System32\\imageres.dll", 12, true)
+                                                Extract("C:\\Windows\\System32\\imageres.dll", 11, true)
                                                     .ToBitmap());
                                     }
                                 }
@@ -94,7 +95,7 @@ namespace URApplication.Models.Registry
                                     }
                                     catch (System.IO.FileNotFoundException)
                                     {
-                                        myBitmap = new Bitmap(Extract("C:\\Windows\\System32\\imageres.dll", 12, true)
+                                        myBitmap = new Bitmap(Extract("C:\\Windows\\System32\\imageres.dll", 11, true)
                                             .ToBitmap());
                                     }
                                 }else if (path[..^2].EndsWith(".EXE", StringComparison.OrdinalIgnoreCase))
@@ -107,7 +108,7 @@ namespace URApplication.Models.Registry
                                     }
                                     catch (System.IO.FileNotFoundException)
                                     {
-                                        myBitmap = new Bitmap(Extract("C:\\Windows\\System32\\imageres.dll", 12, true)
+                                        myBitmap = new Bitmap(Extract("C:\\Windows\\System32\\imageres.dll", 11, true)
                                             .ToBitmap());
                                     }
                                 }
@@ -115,23 +116,57 @@ namespace URApplication.Models.Registry
                             }
                             else if(key.GetValue("WindowsInstaller") is not null)
                             {
-                                using (var iconKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Classes\Installer\Products"))
+                                if(keyParent.Name.Contains("HKEY_LOCAL_MACHINE"))
                                 {
-                                    string[] names = iconKey.GetSubKeyNames();
-                                    foreach (var name in names)
+                                    using (var iconKey =
+                                        Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
+                                            @"SOFTWARE\Classes\Installer\Products"))
                                     {
-                                        using var myiconKey = iconKey.OpenSubKey(name);
-                                        if ((string)key.GetValue("DisplayName") !=
-                                            (string)myiconKey.GetValue("ProductName")) continue;
-                                        try
+                                        string[] names = iconKey.GetSubKeyNames();
+                                        foreach (var name in names)
                                         {
-                                            if(myiconKey.GetValue("ProductIcon") is not null)
-                                                myBitmap = new Bitmap(Icon.ExtractAssociatedIcon((string)myiconKey.GetValue("ProductIcon"))
-                                                .ToBitmap());
-                                            break;
+                                            using var myiconKey = iconKey.OpenSubKey(name);
+                                            if ((string)key.GetValue("DisplayName") !=
+                                                (string)myiconKey.GetValue("ProductName")) continue;
+                                            try
+                                            {
+                                                if (myiconKey.GetValue("ProductIcon") is not null)
+                                                    myBitmap = new Bitmap(Icon
+                                                        .ExtractAssociatedIcon(
+                                                            (string)myiconKey.GetValue("ProductIcon"))
+                                                        .ToBitmap());
+                                                break;
+                                            }
+                                            catch (System.IO.FileNotFoundException)
+                                            {
+                                            }
                                         }
-                                        catch (System.IO.FileNotFoundException )
+                                    }
+                                }
+                                else
+                                {
+                                    using (var iconKey =
+                                        Microsoft.Win32.Registry.CurrentUser.OpenSubKey(
+                                            @"SOFTWARE\Classes\Installer\Products"))
+                                    {
+                                        string[] names = iconKey.GetSubKeyNames();
+                                        foreach (var name in names)
                                         {
+                                            using var myiconKey = iconKey.OpenSubKey(name);
+                                            if ((string)key.GetValue("DisplayName") !=
+                                                (string)myiconKey.GetValue("ProductName")) continue;
+                                            try
+                                            {
+                                                if (myiconKey.GetValue("ProductIcon") is not null)
+                                                    myBitmap = new Bitmap(Icon
+                                                        .ExtractAssociatedIcon(
+                                                            (string)myiconKey.GetValue("ProductIcon"))
+                                                        .ToBitmap());
+                                                break;
+                                            }
+                                            catch (System.IO.FileNotFoundException)
+                                            {
+                                            }
                                         }
                                     }
                                 }
