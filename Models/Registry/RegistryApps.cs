@@ -61,7 +61,7 @@ namespace URApplication.Models.Registry
                         if (Validation.Application(key))
                         {
                             string path = (string)key.GetValue("DisplayIcon");
-                            Bitmap myBitmap;
+                            Bitmap myBitmap = new Bitmap(1,1);
                             if(path is not null)
                             {
                                 path = path?.Trim('"');
@@ -86,12 +86,27 @@ namespace URApplication.Models.Registry
                                         .ToBitmap());
                                 }
                             }
-                            else
+                            else if(key.GetValue("WindowsInstaller") is not null)
                             {
-                                myBitmap = new Bitmap(1, 1);
+                                using (var iconKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Classes\Installer\Products"))
+                                {
+                                    string[] names = iconKey.GetSubKeyNames();
+                                    foreach (var name in names)
+                                    {
+                                        using var myiconKey = iconKey.OpenSubKey(name);
+                                        if ((string)key.GetValue("DisplayName") !=
+                                            (string)myiconKey.GetValue("ProductName")) continue;
+                                        try
+                                        {
+                                            myBitmap = new Bitmap(Icon.ExtractAssociatedIcon((string)myiconKey.GetValue("ProductIcon")??"asd")
+                                                .ToBitmap());
+                                        }
+                                        catch (System.IO.FileNotFoundException )
+                                        {
+                                        }
+                                    }
+                                }
                             }
-                            Imaging.CreateBitmapSourceFromHBitmap(myBitmap.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-
                             applicationModelCollection.Add(new ApplicationModel()
                             {
                                 Name = (string)key.GetValue("DisplayName"),
