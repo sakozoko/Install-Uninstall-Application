@@ -5,15 +5,17 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
+
 namespace URApplication.Models.Registry
 {
     public class RegistryApps : ICreatorApplications
     {
-        private const string UninstallInLocalMachineWow6432 = 
+        private const string UninstallInLocalMachineWow6432 =
             @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall";
 
         private const string UninstallInLocalMachine =
             @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
+
         private const string UninstallInCurrentUser =
             @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
 
@@ -29,12 +31,11 @@ namespace URApplication.Models.Registry
             var applicationModelCollection = GetAppsFromRegistry(registryKeys);
             return applicationModelCollection;
         }
-     
+
         private static ObservableCollection<ApplicationModel> GetAppsFromRegistry(List<RegistryKey> registryKeys)
         {
             var applicationModelCollection = new ObservableCollection<ApplicationModel>();
-            foreach (RegistryKey keyParent in registryKeys)
-            {
+            foreach (var keyParent in registryKeys)
                 using (keyParent)
                 {
                     var subKeyNames = keyParent?.GetSubKeyNames();
@@ -45,11 +46,12 @@ namespace URApplication.Models.Registry
 
                         var path = (string)key.GetValue("DisplayIcon");
 
-                        var myBitmap = key.GetValue("WindowsInstaller") is not null && (int)key.GetValue("WindowsInstaller")==1
+                        var myBitmap = key.GetValue("WindowsInstaller") is not null &&
+                                       (int)key.GetValue("WindowsInstaller") == 1
                             ? AppIcon.GetIconAppInstaller((string)key.GetValue("DisplayName"))
                             : AppIcon.GetIconApp(path);
-    
-                        applicationModelCollection.Add(new ApplicationModel()
+
+                        applicationModelCollection.Add(new ApplicationModel
                         {
                             Name = (string)key.GetValue("DisplayName"),
                             IconSource = Imaging.CreateBitmapSourceFromHBitmap(myBitmap.GetHbitmap(), IntPtr.Zero,
@@ -62,9 +64,8 @@ namespace URApplication.Models.Registry
                         });
                     }
                 }
-            }
+
             return applicationModelCollection;
         }
-
     }
 }

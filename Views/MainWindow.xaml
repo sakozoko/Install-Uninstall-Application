@@ -16,11 +16,11 @@
             <RowDefinition Height="202*"/>
         </Grid.RowDefinitions>
         <Border Grid.Row="0" x:Name="Panel" Height="30" Width="auto" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="1">
-            <Button Width="50" HorizontalAlignment="Left" Margin="10 0" Content="Удалить" DataContext="{Binding SelectedRow}">
+            <Button Width="50" HorizontalAlignment="Left" Margin="10 0" Content="Удалить" Command="{Binding UninstallApplicationCommand}" CommandParameter="{Binding SelectedRow.UninstallCmd}">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding UninstallCmd}" Value="{x:Null}">
+                            <DataTrigger Binding="{Binding SelectedRow}" Value="{x:Null}">
                                 <Setter Property="Visibility" Value="Hidden"></Setter>
                             </DataTrigger>
                         </Style.Triggers>

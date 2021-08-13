@@ -14,7 +14,7 @@ namespace URApplication.Models.Registry
 
         public static string ToWeight(double value)
         {
-            string str = (value / 1024) switch
+            var str = (value / 1024) switch
             {
                 > 0 and < 1000 => $"{(float)(value / 1024):0.##}" + " MB",
                 >= 1000 => $"{(float)(value / 1048576):0.##}" + " GB",
@@ -28,12 +28,9 @@ namespace URApplication.Models.Registry
         {
             if (value is null)
                 return DateTime.Now.ToString("dd.MM.yy");
-            if (DateTime.TryParse(value, out var dateTime))
-            {
-                return dateTime.ToString("dd.MM.yy");
-            }
+            if (DateTime.TryParse(value, out var dateTime)) return dateTime.ToString("dd.MM.yy");
 
-            string newValue = value[0..4]+"."+value[4..6]+"."+value[6..^0];
+            var newValue = value[..4] + "." + value[4..6] + "." + value[6..];
             return DateTime.TryParse(newValue, out dateTime) ? dateTime.ToString("dd.MM.yy") : value;
         }
 
@@ -43,10 +40,10 @@ namespace URApplication.Models.Registry
             {
                 if (path.Contains(','))
                 {
-                    var pathes = path.Split(',', 2, StringSplitOptions.TrimEntries);
-                    pathIcon = pathes[0].Trim('"');
-                    number = int.Parse(pathes[1].Trim('"'));
-                    ext = pathes[0].Split('.', 2, StringSplitOptions.TrimEntries)[1];
+                    var subPath = path.Split(',', 2, StringSplitOptions.TrimEntries);
+                    pathIcon = subPath[0].Trim('"');
+                    number = int.Parse(subPath[1].Trim('"'));
+                    ext = subPath[0].Split('.', 2, StringSplitOptions.TrimEntries)[1];
                 }
                 else
                 {
@@ -61,6 +58,11 @@ namespace URApplication.Models.Registry
                 number = 0;
                 ext = "";
             }
+        }
+
+        public static string TryReplaceUninstallCmd(string cmd)
+        {
+            return "\"" + cmd + "\"";
         }
     }
 }

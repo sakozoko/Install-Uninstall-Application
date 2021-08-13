@@ -7,14 +7,19 @@ namespace URApplication.Models.Registry
     public class AppIcon
     {
         private const string InstallerPathIcons = @"SOFTWARE\Classes\Installer\Products";
-        private static readonly string DefaultPathAppIcon = Environment.GetFolderPath(Environment.SpecialFolder.SystemX86) + "\\imageres.dll,11";
         private const string PathOfMsInstaller = "\\msi.dll,2";
-        [DllImport("Shell32.dll", EntryPoint = "ExtractIconExW", CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
-        private static extern int ExtractIconEx(string sFile, int iIndex, out IntPtr piLargeVersion, out IntPtr piSmallVersion, int amountIcons);
+
+        private static readonly string DefaultPathAppIcon =
+            Environment.GetFolderPath(Environment.SpecialFolder.SystemX86) + "\\imageres.dll,11";
+
+        [DllImport("Shell32.dll", EntryPoint = "ExtractIconExW", CharSet = CharSet.Unicode, ExactSpelling = true,
+            CallingConvention = CallingConvention.StdCall)]
+        private static extern int ExtractIconEx(string sFile, int iIndex, out IntPtr piLargeVersion,
+            out IntPtr piSmallVersion, int amountIcons);
 
         private static Icon Extract(string file, int number, bool largeIcon)
         {
-            ExtractIconEx(file, number, out IntPtr large, out IntPtr small, 1);
+            ExtractIconEx(file, number, out var large, out var small, 1);
             try
             {
                 return Icon.FromHandle(largeIcon ? large : small);
@@ -30,7 +35,7 @@ namespace URApplication.Models.Registry
             var defaultPathLibrary = Environment.GetFolderPath(Environment.SpecialFolder.SystemX86) + PathOfMsInstaller;
             using var iconKey =
                 Microsoft.Win32.Registry.LocalMachine.OpenSubKey(InstallerPathIcons);
-            string[] names = iconKey.GetSubKeyNames();
+            var names = iconKey.GetSubKeyNames();
             foreach (var name in names)
             {
                 using var installerKey = iconKey.OpenSubKey(name);
@@ -38,19 +43,19 @@ namespace URApplication.Models.Registry
                 var path = (string)installerKey.GetValue("ProductIcon");
                 return GetIconApp(path, defaultPathLibrary);
             }
+
             return GetIconApp(null, defaultPathLibrary);
         }
 
 
-
         public static Bitmap GetIconApp(string path)
-        { 
+        {
             return GetIconApp(path, DefaultPathAppIcon);
         }
 
         private static Bitmap GetIconApp(string path, string defaultPathLibrary)
         {
-            Validation.TryReplaceAppIconPath(path, out string pathIcon, out int number, out string ext);
+            Validation.TryReplaceAppIconPath(path, out var pathIcon, out var number, out var ext);
             return GetIconOrDefault(pathIcon, number, ext, defaultPathLibrary);
         }
 
@@ -69,9 +74,7 @@ namespace URApplication.Models.Registry
                 defaultPathLibrary ??= DefaultPathAppIcon;
                 Validation.TryReplaceAppIconPath(defaultPathLibrary, out path, out number, out ext);
                 return GetIconOrDefault(path, number, ext, null);
-
             }
-
         }
     }
 }
