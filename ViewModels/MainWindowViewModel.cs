@@ -15,6 +15,7 @@ namespace URApplication.ViewModels
             get => _selectedModel;
             set { _selectedModel = value; OnPropertyChanged(); }
         }
+
         public MainWindowViewModel()
         {
             ICreatorApplications creator = new RegistryApps();

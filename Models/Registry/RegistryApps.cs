@@ -52,13 +52,13 @@ namespace URApplication.Models.Registry
                         applicationModelCollection.Add(new ApplicationModel()
                         {
                             Name = (string)key.GetValue("DisplayName"),
-                            Icon = myBitmap,
                             IconSource = Imaging.CreateBitmapSourceFromHBitmap(myBitmap.GetHbitmap(), IntPtr.Zero,
                                 Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions()),
                             Version = (string)key.GetValue("DisplayVersion"),
                             InstallDate = Validation.ToDateTime((string)key.GetValue("InstallDate")),
                             Publisher = (string)key.GetValue("Publisher"),
-                            Weight = Validation.ToWeight(Convert.ToDouble(key.GetValue("EstimatedSize")))
+                            Weight = Validation.ToWeight(Convert.ToDouble(key.GetValue("EstimatedSize"))),
+                            UninstallCmd = (string)key.GetValue("UninstallString")
                         });
                     }
                 }

@@ -3,8 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:URApplication"
-        xmlns:vm="clr-namespace:URApplication.ViewModels" 
+        xmlns:vm="clr-namespace:URApplication.ViewModels"
         mc:Ignorable="d"
 
         Title="MainWindow" Height="450" Width="800">
@@ -16,15 +15,27 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="202*"/>
         </Grid.RowDefinitions>
-        <Border Grid.Row="0" x:Name="Panel" Height="30" Width="auto" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="1"/>
-        <DataGrid Grid.Row="1" ItemsSource="{Binding Rows}" AutoGenerateColumns="False"
-                  SelectionMode="Single" SelectedItem="{Binding SelectedRow}" IsReadOnly="True" >
+        <Border Grid.Row="0" x:Name="Panel" Height="30" Width="auto" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="1">
+            <Button Width="50" HorizontalAlignment="Left" Margin="10 0" Content="Удалить" DataContext="{Binding SelectedRow}">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding UninstallCmd}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Hidden"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Border>
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Rows}" AutoGenerateColumns="False" EnableRowVirtualization="True"
+                  SelectionMode="Single" SelectedItem="{Binding SelectedRow}" IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Image" Width="SizeToCells"
+                <DataGridTemplateColumn  Width="SizeToCells" CanUserResize="False"
                                         IsReadOnly="True">
-                    <DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellTemplate >
                         <DataTemplate>
-                            <Image Source="{Binding IconSource}" />
+                            <Image Source="{Binding IconSource}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
