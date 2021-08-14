@@ -36,8 +36,6 @@ namespace URApplication.Models.Registry
 
         public static void TryReplaceAppIconPath(string path, out string pathIcon, out int number, out string ext)
         {
-            var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("");
-            
             if (path is not null)
             {
                 if (path.Contains(','))

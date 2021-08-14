@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using URApplication.Commands;
 using URApplication.Models;
@@ -11,10 +12,49 @@ namespace URApplication.ViewModels
     {
         public MainWindowViewModel()
         {
-            UninstallApplicationCommand = new LambdaCommand(OnUninstallApplicationCommandExecute, CanUninstallApplicationCommandExecute);
-            ICreatorApplications creator = new RegistryApps();
-            Rows = new ObservableCollection<ApplicationModel>(creator.GetApps());
+            UninstallApplicationCommand = new LambdaCommand(OnUninstallApplicationCommandExecute,
+                CanUninstallApplicationCommandExecute);
+            InitRowsAsync();
         }
+
+        #region Rows
+
+        public ObservableCollection<ApplicationModel> Rows { get; set; }
+
+        #endregion
+
+        private async void InitRowsAsync()
+        {
+            ICreatorApplications creator = new RegistryApps();
+            Rows = creator.GetApps();
+            await Task.Run(() =>
+            {
+                #region Binding and start AppWatcher
+
+                BindingAndStartAppWatcher();
+
+                #endregion
+            });
+        }
+
+        private void BindingAndStartAppWatcher()
+        {
+            foreach (var applicationModel in Rows)
+                {
+                    applicationModel.Watcher.RegistryTreeChangeEvent += WatcherRegistryTreeChangeEvent;
+                    applicationModel.Watcher.Start();
+                }
+        }
+
+        #region RegistryChangeEvent
+
+        private void WatcherRegistryTreeChangeEvent(object sender, RegistryTreeChangeEventArgs e)
+        {
+            if (!(sender as AppWatcher).TryUpdateModel())
+                AppWatcher.Dispatcher.Invoke(() => { Rows.Remove((sender as AppWatcher).Model); });
+        }
+
+        #endregion
 
         #region InitializeCommand
 
@@ -33,11 +73,6 @@ namespace URApplication.ViewModels
         }
 
         #endregion
-
-        #endregion
-        #region Rows
-
-        public ObservableCollection<ApplicationModel> Rows { get; set; }
 
         #endregion
 

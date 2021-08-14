@@ -16,19 +16,21 @@
             <RowDefinition Height="202*"/>
         </Grid.RowDefinitions>
         <Border Grid.Row="0" x:Name="Panel" Height="30" Width="auto" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="1">
-            <Button Width="50" HorizontalAlignment="Left" Margin="10 0" Content="Удалить" Command="{Binding UninstallApplicationCommand}" CommandParameter="{Binding SelectedRow.UninstallCmd}">
+            <Button Width="50" HorizontalAlignment="Left" Margin="10 0" Content="Удалить"
+                    Command="{Binding UninstallApplicationCommand}"
+                    CommandParameter="{Binding SelectedRow.UninstallCmd}">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding SelectedRow}" Value="{x:Null}">
-                                <Setter Property="Visibility" Value="Hidden"></Setter>
+                                <Setter Property="Visibility" Value="Hidden"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </Button.Style>
             </Button>
         </Border>
-        <DataGrid Grid.Row="1" ItemsSource="{Binding Rows}" AutoGenerateColumns="False" EnableRowVirtualization="True"
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Rows, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" EnableRowVirtualization="True"
                   SelectionMode="Single" SelectedItem="{Binding SelectedRow}" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTemplateColumn  Width="SizeToCells" CanUserResize="False"
@@ -39,9 +41,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Имя" Binding="{Binding Name}">
-
-                </DataGridTextColumn>
+                <DataGridTextColumn Header="Имя" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Издатель" Binding="{Binding Publisher}"/>
                 <DataGridTextColumn Header="Дата установки" Binding="{Binding InstallDate}">
                     <DataGridTextColumn.CellStyle>

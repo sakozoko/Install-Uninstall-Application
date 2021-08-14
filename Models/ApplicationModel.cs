@@ -1,15 +1,121 @@
 ﻿using System.Windows.Media;
+using URApplication.Models.Registry;
+using URApplication.ViewModels.Base;
 
 namespace URApplication.Models
 {
-    public class ApplicationModel
+    public class ApplicationModel : ViewModel
     {
-        public string Name { get; set; }
+        #region Properties
+
+        #region Name
+
+        private string _name;
+
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+            }
+        }
+
+        #endregion
+
+        #region IconSource
+
         public ImageSource IconSource { get; set; }
-        public string Version { get; set; }
-        public string Publisher { get; set; }
-        public string InstallDate { get; set; }
-        public string Weight { get; set; }
-        public string UninstallCmd { get; set; }
+
+        #endregion
+
+        #region Version
+
+        private string _version;
+
+        public string Version
+        {
+            get => _version;
+            set
+            {
+                _version = value;
+                OnPropertyChanged(nameof(Version));
+            }
+        }
+
+        #endregion
+
+        #region Publisher
+
+        private string _publisher;
+
+        public string Publisher
+        {
+            get => _publisher;
+            set
+            {
+                _publisher = value;
+                OnPropertyChanged(nameof(Publisher));
+            }
+        }
+
+        #endregion
+
+        #region InstallDate
+
+        private string _installDate;
+
+        public string InstallDate
+        {
+            get => _installDate;
+            set
+            {
+                _installDate = value;
+                OnPropertyChanged(nameof(InstallDate));
+            }
+        }
+
+        #endregion
+
+        #region Weight
+
+        private string _weight;
+
+        public string Weight
+        {
+            get => _weight;
+            set
+            {
+                _weight = value;
+                OnPropertyChanged(nameof(Weight));
+            }
+        }
+
+        #endregion
+
+        #region UninstallCmd
+
+        private string _uninstallCmd;
+
+        public string UninstallCmd
+        {
+            get => _uninstallCmd;
+            set
+            {
+                _uninstallCmd = value;
+                OnPropertyChanged(nameof(UninstallCmd));
+            }
+        }
+
+        #endregion
+
+        #region Watcher
+
+        public AppWatcher Watcher { get; set; }
+
+        #endregion
+
+        #endregion
     }
 }

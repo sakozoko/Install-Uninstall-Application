@@ -4,16 +4,15 @@ using Microsoft.Win32;
 
 namespace URApplication.Models.Registry
 {
-    internal class RegistryWatcher : ManagementEventWatcher, IDisposable
+    public class RegistryWatcher : ManagementEventWatcher
     {
         public RegistryWatcher(RegistryKey hive, string keyPath)
         {
             Hive = hive;
             KeyPath = keyPath;
-            KeyToMonitor = hive.OpenSubKey(keyPath);
-
-            if (KeyToMonitor != null)
+            if (hive.OpenSubKey(keyPath) != null)
             {
+                if (hive.Name.Contains("CURRENT_USER")) EventCurrentUser();
                 var queryString =
                     $@"SELECT * FROM RegistryTreeChangeEvent WHERE Hive = '{Hive.Name}' AND RootPath = '{KeyPath}' ";
                 var query = new WqlEventQuery
@@ -33,45 +32,40 @@ namespace URApplication.Models.Registry
             }
         }
 
-        public RegistryKey Hive { get; }
-        public string KeyPath { get; }
-        public RegistryKey KeyToMonitor { get; }
+        public RegistryKey Hive { get; private set; }
+        public string KeyPath { get; private set; }
+        private static string SidUser { get; set; }
 
-        /// <summary>
-        ///     Dispose the RegistryKey.
-        /// </summary>
-        public new void Dispose()
+        private void EventCurrentUser()
         {
-            base.Dispose();
-            KeyToMonitor?.Dispose();
+            if (SidUser is null)
+            {
+                using var keyFolderWithUserName = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Volatile Environment");
+                var username = (string)keyFolderWithUserName.GetValue("USERNAME");
+                using var keyFolderWithUserProfiles =
+                    Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
+                        "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList");
+                foreach (var keyName in keyFolderWithUserProfiles.GetSubKeyNames())
+                {
+                    using var keyFolderWithUserProfile = keyFolderWithUserProfiles.OpenSubKey(keyName);
+                    if (!(keyFolderWithUserProfile.GetValue("ProfileImagePath") as string).Contains(username ?? string.Empty)) continue;
+                    SidUser = keyName + "\\\\";
+                    break;
+                }
+            }
+            Hive = Microsoft.Win32.Registry.Users;
+            KeyPath = SidUser + KeyPath;
         }
 
-        public event EventHandler<RegistryKeyChangeEventArgs> RegistryKeyChangeEvent;
-
+        public event EventHandler<RegistryTreeChangeEventArgs> RegistryTreeChangeEvent;
         private void RegistryWatcher_EventArrived(object sender, EventArrivedEventArgs e)
         {
-            if (RegistryKeyChangeEvent == null) return;
-            // Get RegistryKeyChangeEventArgs from EventArrivedEventArgs.NewEvent.Properties.
-            var args = new RegistryKeyChangeEventArgs(e.NewEvent);
-
-            // Raise the event handler. 
-            RegistryKeyChangeEvent(sender, args);
+            if (RegistryTreeChangeEvent == null) return;
+            var args = new RegistryTreeChangeEventArgs(e.NewEvent);
+            RegistryTreeChangeEvent(sender, args);
         }
     }
 
 
-    internal class RegistryKeyChangeEventArgs : EventArgs
-    {
-        public RegistryKeyChangeEventArgs(ManagementBaseObject arrivedEvent)
-        {
-            Hive = arrivedEvent.Properties[nameof(Hive)].Value as string;
-            RootPath = arrivedEvent.Properties[nameof(RootPath)].Value as string;
-            TimeCreated = new DateTime(
-                (long)(ulong)arrivedEvent.Properties[nameof(TimeCreated)].Value,
-                DateTimeKind.Utc).AddYears(1600);
-        }
-        public string Hive { get; set; }
-        public string RootPath { get; set; }
-        public DateTime TimeCreated { get; set; }
-    }
+
 }
