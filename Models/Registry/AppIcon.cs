@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
-
 namespace URApplication.Models.Registry
 {
     public class AppIcon
@@ -16,6 +15,9 @@ namespace URApplication.Models.Registry
             CallingConvention = CallingConvention.StdCall)]
         private static extern int ExtractIconEx(string sFile, int iIndex, out IntPtr piLargeVersion,
             out IntPtr piSmallVersion, int amountIcons);
+
+        [DllImport("StdProv.dll", EntryPoint = "RegistryTreeChangeEvent")]
+        private static extern object RegistryTreeChangeEvent();
 
         private static Icon Extract(string file, int number, bool largeIcon)
         {
