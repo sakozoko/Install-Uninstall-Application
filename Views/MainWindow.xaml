@@ -5,84 +5,80 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:URApplication.ViewModels"
         xmlns:convert="clr-namespace:URApplication.ViewModels.Convert"
+        xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         mc:Ignorable="d"
 
-        Title="MainWindow" Height="450" Width="800">
-    <Window.Resources>
-        <convert:WeightConvert x:Key="WeightConvert"/>
-        <convert:DateConvert x:Key="DateConvert"/>
-    </Window.Resources>
+        Title="MainWindow" Height="450" Width="800" Style="{StaticResource Styles}">
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
+    <Window.Resources>
+        <convert:WeightConvert x:Key="WeightConvert"/>
+        <convert:DateConvert x:Key="DateConvert"/>
+        <CollectionViewSource Source="{Binding Rows}" x:Key="GridItems">
+            <CollectionViewSource.SortDescriptions>
+                <componentModel:SortDescription PropertyName="Name" Direction="Ascending"/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+    </Window.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="202*"/>
-        </Grid.RowDefinitions>
-        <Border Grid.Row="0" x:Name="Panel" Height="30" Width="auto" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="1">
-            <Button Width="50" HorizontalAlignment="Left" Margin="10 0" Content="Удалить"
-                    Command="{Binding UninstallApplicationCommand}"
-                    CommandParameter="{Binding SelectedRow.UninstallCmd}">
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding SelectedRow}" Value="{x:Null}">
-                                <Setter Property="Visibility" Value="Hidden"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
-        </Border>
-        <DataGrid Grid.Row="1" ItemsSource="{Binding Rows, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" EnableRowVirtualization="True"
-                  SelectionMode="Single" SelectedItem="{Binding SelectedRow}" IsReadOnly="True">
+
+        <DataGrid Padding="0 5" x:Name="GridName"  Style="{StaticResource DataGrid}" ItemsSource="{Binding Source={StaticResource GridItems}, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" EnableRowVirtualization="True"
+                  SelectionMode="Single" SelectedItem="{Binding SelectedRow}" IsReadOnly="True" RowStyle="{StaticResource DataGridRow}">
             <DataGrid.Columns>
-                <DataGridTemplateColumn  Width="SizeToCells" CanUserResize="False"
-                                        IsReadOnly="True">
+                <DataGridTemplateColumn  Width="SizeToCells" CellStyle="{StaticResource DataGridTemplateIcon}">
                     <DataGridTemplateColumn.CellTemplate >
                         <DataTemplate>
-                            <Image Source="{Binding IconSource}"/>
+                            <Border Width="40" Height="40" Padding="4" Margin="5 4 " Background="#263252">
+                                <Image Source="{Binding IconSource}"/>
+                            </Border>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Имя" Width="SizeToCells" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Издатель" Width="SizeToCells" Binding="{Binding Publisher}"/>
-                <DataGridTextColumn Header="Дата установки" Width="SizeToCells" Binding="{Binding InstallDate,
-                    Converter = {StaticResource DateConvert}}" >
-                    <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
-                            <Setter Property="HorizontalAlignment" Value="Right"></Setter>
-                        </Style>
-                    </DataGridTextColumn.CellStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn  Header="Размер" Binding="{Binding Weight, Converter={StaticResource WeightConvert}}">
-                    <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
-                            <Style.Triggers>
-                                <DataTrigger >
-                                    
-                                </DataTrigger>
-                            </Style.Triggers>
-                            <Setter Property="HorizontalAlignment" Value="Right"></Setter>
-                        </Style>
-                    </DataGridTextColumn.CellStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Версия" Binding="{Binding Version}">
-                    <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
-                            <Setter Property="HorizontalAlignment" Value="Right"></Setter>
-                        </Style>
-                    </DataGridTextColumn.CellStyle>
-                </DataGridTextColumn>
+                <DataGridTextColumn CellStyle="{StaticResource DataGridTextBoxColumn}" Width="*"
+                                    Binding="{Binding Name}" />
+                <DataGridTemplateColumn Width="*" CellStyle="{StaticResource DataGridTextBoxColumnWeight}"  >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock TextAlignment="Right" Text="{Binding Weight, Converter={StaticResource WeightConvert}}" Margin="0 0 5 0" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
-            <DataGrid.RowDetailsTemplate>
-                <DataTemplate DataType="{x:Type vm:MainWindowViewModel}">
-                    <Grid>
-                        <TextBlock Text="{Binding Name}"/>
+            <DataGrid.RowDetailsTemplate >
+                <DataTemplate>
+                    <Grid Margin="5 -21 5 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="46"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Publisher}" />
+                        <TextBlock Grid.Row="0" Grid.Column="2"  Text="{Binding Version}" HorizontalAlignment="Right"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1"  Text="{Binding InstallDate, Converter = {StaticResource DateConvert}}"/>
+                        <Grid Grid.Row="2" Grid.Column="1" Margin="0 0 0 4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Width="60" Height="30" Content="Uninstall" Style="{StaticResource ButtonModifyApp}"
+                                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=DataGrid}, Path=  DataContext.UninstallApplicationCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=DataGrid}, Path=  DataContext.SelectedRow.UninstallCmd}">
+                            </Button>
+                            <Button Grid.Column="1" Width="60" Height="30" Content="Modify" Style="{StaticResource ButtonModifyApp}"
+                                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=DataGrid}, Path=  DataContext.UninstallApplicationCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=DataGrid}, Path=  DataContext.SelectedRow.UninstallCmd}">
+                            </Button>
+                        </Grid>
+
                     </Grid>
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
         </DataGrid>
-        </Grid>
+    </Grid>
 </Window>
