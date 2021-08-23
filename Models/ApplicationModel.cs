@@ -80,9 +80,9 @@ namespace URApplication.Models
 
         #region Weight
 
-        private string _weight;
+        private int _weight;
 
-        public string Weight
+        public int Weight
         {
             get => _weight;
             set

@@ -40,10 +40,10 @@ namespace URApplication.ViewModels
         private void BindingAndStartAppWatcher()
         {
             foreach (var applicationModel in Rows)
-                {
-                    applicationModel.Watcher.RegistryTreeChangeEvent += WatcherRegistryTreeChangeEvent;
-                    applicationModel.Watcher.Start();
-                }
+            {
+                applicationModel.Watcher.RegistryTreeChangeEvent += WatcherRegistryTreeChangeEvent;
+                applicationModel.Watcher.Start();
+            }
         }
 
         #region RegistryChangeEvent

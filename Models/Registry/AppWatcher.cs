@@ -37,9 +37,9 @@ namespace URApplication.Models.Registry
                 Model.IconSource = Imaging.CreateBitmapSourceFromHBitmap(myBitmap.GetHbitmap(), IntPtr.Zero,
                     Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
                 Model.Version = (string)key.GetValue("DisplayVersion");
-                Model.InstallDate = Validation.ToDateTime((string)key.GetValue("InstallDate"));
+                Model.InstallDate = (string)key.GetValue("InstallDate");
                 Model.Publisher = (string)key.GetValue("Publisher");
-                Model.Weight = Validation.ToWeight(Convert.ToDouble(key.GetValue("EstimatedSize")));
+                Model.Weight = key.GetValue("EstimatedSize") is not null ? Int32.Parse(key.GetValue("EstimatedSize").ToString() ?? "0") : 0;
                 Model.UninstallCmd = (string)key.GetValue("UninstallString");
                 return true;
             });

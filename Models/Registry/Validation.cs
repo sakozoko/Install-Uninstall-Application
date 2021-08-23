@@ -12,28 +12,7 @@ namespace URApplication.Models.Registry
                     (int)key.GetValue("SystemComponent") != 1);
         }
 
-        public static string ToWeight(double value)
-        {
-            var str = (value / 1024) switch
-            {
-                > 0 and < 1000 => $"{(float)(value / 1024):0.##}" + " MB",
-                >= 1000 => $"{(float)(value / 1048576):0.##}" + " GB",
-                _ => value == 0d ? "" : $"{value:0.##}" + " KB"
-            };
-
-            return str;
-        }
-
-        public static string ToDateTime(string value)
-        {
-            if (value is null)
-                return DateTime.Now.ToString("dd.MM.yy");
-            if (DateTime.TryParse(value, out var dateTime)) return dateTime.ToString("dd.MM.yy");
-
-            var newValue = value[..4] + "." + value[4..6] + "." + value[6..];
-            return DateTime.TryParse(newValue, out dateTime) ? dateTime.ToString("dd.MM.yy") : value;
-        }
-
+        
         public static void TryReplaceAppIconPath(string path, out string pathIcon, out int number, out string ext)
         {
             if (path is not null)

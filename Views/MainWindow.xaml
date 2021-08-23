@@ -4,9 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:URApplication.ViewModels"
+        xmlns:convert="clr-namespace:URApplication.ViewModels.Convert"
         mc:Ignorable="d"
 
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <convert:WeightConvert x:Key="WeightConvert"/>
+        <convert:DateConvert x:Key="DateConvert"/>
+    </Window.Resources>
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
@@ -41,18 +46,24 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Имя" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Издатель" Binding="{Binding Publisher}"/>
-                <DataGridTextColumn Header="Дата установки" Binding="{Binding InstallDate}">
+                <DataGridTextColumn Header="Имя" Width="SizeToCells" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Издатель" Width="SizeToCells" Binding="{Binding Publisher}"/>
+                <DataGridTextColumn Header="Дата установки" Width="SizeToCells" Binding="{Binding InstallDate,
+                    Converter = {StaticResource DateConvert}}" >
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
                             <Setter Property="HorizontalAlignment" Value="Right"></Setter>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Размер" Binding="{Binding Weight}">
+                <DataGridTextColumn  Header="Размер" Binding="{Binding Weight, Converter={StaticResource WeightConvert}}">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger >
+                                    
+                                </DataTrigger>
+                            </Style.Triggers>
                             <Setter Property="HorizontalAlignment" Value="Right"></Setter>
                         </Style>
                     </DataGridTextColumn.CellStyle>
