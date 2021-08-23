@@ -5,8 +5,9 @@ using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Microsoft.Win32;
+using URApplication.Models.Application.Registry;
 
-namespace URApplication.Models.Registry
+namespace URApplication.Models.Application
 {
     public class AppWatcher : RegistryWatcher
     {

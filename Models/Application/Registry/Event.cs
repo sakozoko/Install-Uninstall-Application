@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
 
-namespace URApplication.Models.Registry
+namespace URApplication.Models.Application.Registry
 {
     public class RegistryEventCreator
     {

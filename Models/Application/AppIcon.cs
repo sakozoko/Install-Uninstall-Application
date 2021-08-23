@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace URApplication.Models.Registry
+namespace URApplication.Models.Application
 {
     public class AppIcon
     {
@@ -55,7 +55,7 @@ namespace URApplication.Models.Registry
 
         private static Bitmap GetIconApp(string path, string defaultPathLibrary)
         {
-            Validation.TryReplaceAppIconPath(path, out var pathIcon, out var number, out var ext);
+            StringReplace.TryReplaceAppIconPath(path, out var pathIcon, out var number, out var ext);
             return GetIconOrDefault(pathIcon, number, ext, defaultPathLibrary);
         }
 
@@ -72,7 +72,7 @@ namespace URApplication.Models.Registry
             catch
             {
                 defaultPathLibrary ??= DefaultPathAppIcon;
-                Validation.TryReplaceAppIconPath(defaultPathLibrary, out path, out number, out ext);
+                StringReplace.TryReplaceAppIconPath(defaultPathLibrary, out path, out number, out ext);
                 return GetIconOrDefault(path, number, ext, null);
             }
         }

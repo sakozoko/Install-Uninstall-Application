@@ -76,6 +76,13 @@
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
             </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate DataType="{x:Type vm:MainWindowViewModel}">
+                    <Grid>
+                        <TextBlock Text="{Binding Name}"/>
+                    </Grid>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
         </DataGrid>
         </Grid>
 </Window>

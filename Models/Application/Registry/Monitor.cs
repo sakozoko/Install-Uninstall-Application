@@ -2,7 +2,7 @@
 using System.Management;
 using Microsoft.Win32;
 
-namespace URApplication.Models.Registry
+namespace URApplication.Models.Application.Registry
 {
     public class RegistryWatcher : ManagementEventWatcher
     {
@@ -57,11 +57,11 @@ namespace URApplication.Models.Registry
             KeyPath = SidUser + KeyPath;
         }
 
-        public event EventHandler<RegistryTreeChangeEventArgs> RegistryTreeChangeEvent;
+        public event EventHandler<TreeChangeEventArgs> RegistryTreeChangeEvent;
         private void RegistryWatcher_EventArrived(object sender, EventArrivedEventArgs e)
         {
             if (RegistryTreeChangeEvent == null) return;
-            var args = new RegistryTreeChangeEventArgs(e.NewEvent);
+            var args = new TreeChangeEventArgs(e.NewEvent);
             RegistryTreeChangeEvent(sender, args);
         }
     }

@@ -2,8 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using URApplication.Commands;
-using URApplication.Models;
-using URApplication.Models.Registry;
+using URApplication.Models.Application;
 using URApplication.ViewModels.Base;
 
 namespace URApplication.ViewModels
@@ -25,7 +24,7 @@ namespace URApplication.ViewModels
 
         private async void InitRowsAsync()
         {
-            ICreatorApplications creator = new RegistryApps();
+            var creator = new AppModelsCreator();
             Rows = creator.GetApps();
             await Task.Run(() =>
             {
@@ -48,7 +47,7 @@ namespace URApplication.ViewModels
 
         #region RegistryChangeEvent
 
-        private void WatcherRegistryTreeChangeEvent(object sender, RegistryTreeChangeEventArgs e)
+        private void WatcherRegistryTreeChangeEvent(object sender, Models.Application.Registry.TreeChangeEventArgs e)
         {
             if (!(sender as AppWatcher).TryUpdateModel())
                 AppWatcher.Dispatcher.Invoke(() => { Rows.Remove((sender as AppWatcher).Model); });
@@ -69,7 +68,7 @@ namespace URApplication.ViewModels
 
         private void OnUninstallApplicationCommandExecute(object obj)
         {
-            AppUninstaller.TryUninstall((string)obj);
+            Uninstaller.TryUninstall((string)obj);
         }
 
         #endregion

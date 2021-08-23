@@ -1,8 +1,7 @@
 ﻿using System.Windows.Media;
-using URApplication.Models.Registry;
 using URApplication.ViewModels.Base;
 
-namespace URApplication.Models
+namespace URApplication.Models.Application
 {
     public class ApplicationModel : ViewModel
     {

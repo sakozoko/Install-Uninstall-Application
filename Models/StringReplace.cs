@@ -1,18 +1,9 @@
 ﻿using System;
-using Microsoft.Win32;
 
-namespace URApplication.Models.Registry
+namespace URApplication.Models
 {
-    public static class Validation
+    public class StringReplace
     {
-        public static bool Application(RegistryKey key)
-        {
-            return key.GetValue("DisplayName") is not null && key.GetValue("ParentKeyName") is null &&
-                   (key.GetValue("SystemComponent") is null ||
-                    (int)key.GetValue("SystemComponent") != 1);
-        }
-
-        
         public static void TryReplaceAppIconPath(string path, out string pathIcon, out int number, out string ext)
         {
             if (path is not null)
@@ -39,7 +30,7 @@ namespace URApplication.Models.Registry
             }
         }
 
-        public static string TryReplaceUninstallCmd(string cmd)
+        public static string ReplaceUninstallCmd(string cmd)
         {
             return "\"" + cmd + "\"";
         }

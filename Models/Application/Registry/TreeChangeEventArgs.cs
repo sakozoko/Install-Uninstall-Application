@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Management;
 
-namespace URApplication.Models.Registry
+namespace URApplication.Models.Application.Registry
 {
-    public class RegistryTreeChangeEventArgs : EventArgs
+    public class TreeChangeEventArgs : EventArgs
     {
-        public RegistryTreeChangeEventArgs(ManagementBaseObject arrivedEvent)
+        public TreeChangeEventArgs(ManagementBaseObject arrivedEvent)
         {
             Hive = arrivedEvent.Properties[nameof(Hive)].Value as string;
             RootPath = arrivedEvent.Properties[nameof(RootPath)].Value as string;

@@ -7,33 +7,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Microsoft.Win32;
 
-namespace URApplication.Models.Registry
+namespace URApplication.Models.Application.Registry
 {
-    public class RegistryApps : ICreatorApplications
+    public class AppCreator
     {
-        private const string UninstallInLocalMachineWow6432 =
-            @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall";
-
-        private const string UninstallInLocalMachine =
-            @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
-
-        private const string UninstallInCurrentUser =
-            @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
-
-
-        public ObservableCollection<ApplicationModel> GetApps()
-        {
-            var registryKeys = new List<RegistryKey>
-            {
-                Microsoft.Win32.Registry.LocalMachine.OpenSubKey(UninstallInLocalMachineWow6432),
-                Microsoft.Win32.Registry.LocalMachine.OpenSubKey(UninstallInLocalMachine),
-                Microsoft.Win32.Registry.CurrentUser.OpenSubKey(UninstallInCurrentUser)
-            };
-            var applicationModelCollection = GetAppsFromRegistry(registryKeys);
-            return applicationModelCollection;
-        }
-
-        private static ObservableCollection<ApplicationModel> GetAppsFromRegistry(List<RegistryKey> registryKeys)
+        public static ObservableCollection<ApplicationModel> GetAppsFromRegistry(List<RegistryKey> registryKeys)
         {
             var applicationModelCollection = new ObservableCollection<ApplicationModel>();
             foreach (var keyParent in registryKeys)
@@ -75,7 +53,9 @@ namespace URApplication.Models.Registry
                 Version = (string)key.GetValue("DisplayVersion"),
                 InstallDate = (string)key.GetValue("InstallDate"),
                 Publisher = (string)key.GetValue("Publisher"),
-                Weight = key.GetValue("EstimatedSize") is not null ? Int32.Parse(key.GetValue("EstimatedSize").ToString() ?? "0") : 0,
+                Weight = key.GetValue("EstimatedSize") is not null
+                    ? int.Parse(key.GetValue("EstimatedSize").ToString() ?? "0")
+                    : 0,
                 UninstallCmd = (string)key.GetValue("UninstallString")
             };
             return newInstance;

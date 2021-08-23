@@ -1,12 +1,12 @@
 ﻿using System.Diagnostics;
 
-namespace URApplication.Models.Registry
+namespace URApplication.Models.Application
 {
-    public class AppUninstaller
+    public class Uninstaller
     {
         public static void TryUninstall(string cmd)
         {
-            cmd = Validation.TryReplaceUninstallCmd(cmd);
+            cmd = StringReplace.ReplaceUninstallCmd(cmd);
             Process.Start(new ProcessStartInfo()
             {
                 FileName = "cmd",
