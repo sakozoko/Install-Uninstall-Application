@@ -25,7 +25,17 @@ namespace URApplication.Models.Application
 
         #region IconSource
 
-        public ImageSource IconSource { get; set; }
+        private ImageSource _iconSource;
+
+        public ImageSource IconSource
+        {
+            get => _iconSource;
+            set
+            {
+                _iconSource = value;
+                OnPropertyChanged(nameof(IconSource));
+            }
+        }
 
         #endregion
 
@@ -106,6 +116,7 @@ namespace URApplication.Models.Application
                 OnPropertyChanged(nameof(UninstallCmd));
             }
         }
+
         #endregion
 
         #region ModifyPath

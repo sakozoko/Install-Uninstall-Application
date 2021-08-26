@@ -40,7 +40,8 @@ namespace URApplication.Models.Application.Registry
         {
             if (SidUser is null)
             {
-                using var keyFolderWithUserName = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Volatile Environment");
+                using var keyFolderWithUserName =
+                    Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Volatile Environment");
                 var username = (string)keyFolderWithUserName.GetValue("USERNAME");
                 using var keyFolderWithUserProfiles =
                     Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
@@ -48,16 +49,19 @@ namespace URApplication.Models.Application.Registry
                 foreach (var keyName in keyFolderWithUserProfiles.GetSubKeyNames())
                 {
                     using var keyFolderWithUserProfile = keyFolderWithUserProfiles.OpenSubKey(keyName);
-                    if (!(keyFolderWithUserProfile.GetValue("ProfileImagePath") as string).Contains(username ?? string.Empty)) continue;
+                    if (!(keyFolderWithUserProfile.GetValue("ProfileImagePath") as string).Contains(username ??
+                        string.Empty)) continue;
                     SidUser = keyName + "\\\\";
                     break;
                 }
             }
+
             Hive = Microsoft.Win32.Registry.Users;
             KeyPath = SidUser + KeyPath;
         }
 
         public event EventHandler<TreeChangeEventArgs> RegistryTreeChangeEvent;
+
         private void RegistryWatcher_EventArrived(object sender, EventArrivedEventArgs e)
         {
             if (RegistryTreeChangeEvent == null) return;
@@ -65,7 +69,4 @@ namespace URApplication.Models.Application.Registry
             RegistryTreeChangeEvent(sender, args);
         }
     }
-
-
-
 }

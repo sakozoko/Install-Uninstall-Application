@@ -17,16 +17,17 @@ namespace URApplication.Models.Application
         private static extern int ExtractIconEx(string sFile, int iIndex, out IntPtr piLargeVersion,
             out IntPtr piSmallVersion, int amountIcons);
 
-        private static Icon Extract(string file, int number, bool largeIcon)
+        private static Bitmap Extract(string file, int number, bool largeIcon)
         {
             ExtractIconEx(file, number, out var large, out var small, 1);
             try
             {
-                return Icon.FromHandle(largeIcon ? large : small);
+                return Icon.FromHandle(largeIcon ? large : small).ToBitmap();
             }
             catch
             {
-                return null;
+                StringReplace.TryReplaceAppIconPath(DefaultPathAppIcon, out file, out number, out var ext);
+                return GetIconOrDefault(file, number, ext, null);
             }
         }
 
@@ -64,10 +65,10 @@ namespace URApplication.Models.Application
         {
             try
             {
-                if (ext.Contains("DLL", StringComparison.OrdinalIgnoreCase))
-                    return new Bitmap(Extract(path, number, true)
-                        .ToBitmap());
-                return Icon.ExtractAssociatedIcon(path).ToBitmap();
+                if (!ext.Contains("DLL", StringComparison.OrdinalIgnoreCase))
+                    return Icon.ExtractAssociatedIcon(path).ToBitmap();
+                var icon = new Bitmap(Extract(path, number, true));
+                return icon;
             }
             catch
             {

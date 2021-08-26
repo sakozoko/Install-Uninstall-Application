@@ -7,13 +7,12 @@ namespace URApplication.Models.Application
         public static void TryUninstall(string cmd)
         {
             cmd = StringReplace.ReplaceUninstallCmd(cmd);
-            Process.Start(new ProcessStartInfo()
+            Process.Start(new ProcessStartInfo
             {
                 FileName = "cmd",
-                Arguments =  "/c "+cmd,
+                Arguments = "/c " + cmd,
                 CreateNoWindow = true
             });
-
         }
 
         public static void TryModify(string cmd)

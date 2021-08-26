@@ -10,6 +10,7 @@ namespace URApplication.Models.Application.Registry
             Hive = arrivedEvent.Properties[nameof(Hive)].Value as string;
             RootPath = arrivedEvent.Properties[nameof(RootPath)].Value as string;
         }
+
         public string Hive { get; set; }
         public string RootPath { get; set; }
     }

@@ -2,22 +2,28 @@
 using System.Threading.Tasks;
 using URApplication.Commands;
 using URApplication.Models.Application;
+using URApplication.Models.Application.Registry;
 using URApplication.ViewModels.Base;
 
 namespace URApplication.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
-        public MainWindowViewModel()
+        #region ApplicationModel Collection
+
+        #region Rows Property
+
+        private ObservableCollection<ApplicationModel> _rows;
+
+        public ObservableCollection<ApplicationModel> Rows
         {
-            InitRowsAsync();
+            get
+            {
+                if (_rows is null) InitRowsAsync();
+                return _rows;
+            }
+            set => _rows = value;
         }
-
-        #region Rows
-
-        public ObservableCollection<ApplicationModel> Rows { get; set; }
-
-        #endregion
 
         private async void InitRowsAsync()
         {
@@ -33,6 +39,11 @@ namespace URApplication.ViewModels
             });
         }
 
+        #endregion
+
+
+        #region AppModelChangeEvent
+
         private void BindingAndStartAppWatcher()
         {
             foreach (var applicationModel in Rows)
@@ -44,22 +55,43 @@ namespace URApplication.ViewModels
 
         #region RegistryChangeEvent
 
-        private void WatcherRegistryTreeChangeEvent(object sender, Models.Application.Registry.TreeChangeEventArgs e)
+        private void WatcherRegistryTreeChangeEvent(object sender, TreeChangeEventArgs e)
         {
             if (!(sender as AppWatcher).TryUpdateModel())
-                AppWatcher.Dispatcher.Invoke(() => { Rows.Remove((sender as AppWatcher).Model); });
+                AppWatcher.Dispatcher.Invoke(() => { Rows?.Remove((sender as AppWatcher).Model); });
         }
 
         #endregion
 
+        #endregion
+
+        #region SelectedRow
+
+        private ApplicationModel _selectedModel;
+
+        public ApplicationModel SelectedRow
+        {
+            get => _selectedModel;
+            set
+            {
+                _selectedModel = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
+        #endregion
 
         #region InitializeCommand
 
         #region ModifyApplicationCommand
+
         private LambdaCommand _modifyApplicationCommand;
 
-        public LambdaCommand ModifyApplicationCommand => _modifyApplicationCommand ??= new LambdaCommand(OnModifyApplicationCommandExecute,
-                    CanModifyApplicationCommandExecute);
+        public LambdaCommand ModifyApplicationCommand => _modifyApplicationCommand ??= new LambdaCommand(
+            OnModifyApplicationCommandExecute,
+            CanModifyApplicationCommandExecute);
 
         public bool CanModifyApplicationCommandExecute(object obj)
         {
@@ -97,22 +129,6 @@ namespace URApplication.ViewModels
         }
 
         #endregion
-
-        #endregion
-
-        #region SelectedRow
-
-        private ApplicationModel _selectedModel;
-
-        public ApplicationModel SelectedRow
-        {
-            get => _selectedModel;
-            set
-            {
-                _selectedModel = value;
-                OnPropertyChanged();
-            }
-        }
 
         #endregion
     }

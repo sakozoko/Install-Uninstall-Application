@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using Microsoft.Win32;
 using URApplication.Models.Application.Registry;
+
 namespace URApplication.Models.Application
 {
     public class AppModelsCreator : ICreatorApplications
@@ -24,7 +25,7 @@ namespace URApplication.Models.Application
                 Microsoft.Win32.Registry.LocalMachine.OpenSubKey(UninstallInLocalMachine),
                 Microsoft.Win32.Registry.CurrentUser.OpenSubKey(UninstallInCurrentUser)
             };
-            
+
             var applicationModelCollection = AppCreator.GetAppsFromRegistry(registryKeys);
             return applicationModelCollection;
         }

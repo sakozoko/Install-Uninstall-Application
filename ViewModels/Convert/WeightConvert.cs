@@ -7,7 +7,6 @@ namespace URApplication.ViewModels.Convert
     [ValueConversion(typeof(double), typeof(string))]
     public class WeightConvert : IValueConverter
     {
-
         public object Convert(object obj, Type targetType, object parameter, CultureInfo culture)
         {
             if (obj is null) return "";

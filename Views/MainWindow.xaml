@@ -10,70 +10,76 @@
 
         Title="MainWindow" Height="450" Width="800" Style="{StaticResource Styles}">
     <Window.DataContext>
-        <vm:MainWindowViewModel/>
+        <vm:MainWindowViewModel />
     </Window.DataContext>
     <Window.Resources>
-        <convert:WeightConvert x:Key="WeightConvert"/>
-        <convert:DateConvert x:Key="DateConvert"/>
+        <convert:WeightConvert x:Key="WeightConvert" />
+        <convert:DateConvert x:Key="DateConvert" />
         <CollectionViewSource Source="{Binding Rows}" x:Key="GridItems">
             <CollectionViewSource.SortDescriptions>
-                <componentModel:SortDescription PropertyName="Name" Direction="Ascending"/>
+                <componentModel:SortDescription PropertyName="Name" Direction="Ascending" />
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
     </Window.Resources>
     <Grid>
 
-        <DataGrid Padding="0 5" x:Name="GridName"  Style="{StaticResource DataGrid}" ItemsSource="{Binding Source={StaticResource GridItems}, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" EnableRowVirtualization="True"
-                  SelectionMode="Single" SelectedItem="{Binding SelectedRow}" IsReadOnly="True" RowStyle="{StaticResource DataGridRow}">
+        <DataGrid Padding="0 5" x:Name="GridName" Style="{StaticResource DataGrid}"
+                  ItemsSource="{Binding Source={StaticResource GridItems}, UpdateSourceTrigger=PropertyChanged}"
+                  AutoGenerateColumns="False" EnableRowVirtualization="True"
+                  SelectionMode="Single" SelectedItem="{Binding SelectedRow}" IsReadOnly="True"
+                  RowStyle="{StaticResource DataGridRow}">
             <DataGrid.Columns>
-                <DataGridTemplateColumn  Width="SizeToCells" CellStyle="{StaticResource DataGridTemplateIcon}">
-                    <DataGridTemplateColumn.CellTemplate >
+                <DataGridTemplateColumn Width="SizeToCells" CellStyle="{StaticResource DataGridTemplateIcon}">
+                    <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Border Width="40" Height="40" Padding="4" Margin="5 4 " Background="#263252">
-                                <Image Source="{Binding IconSource}"/>
+                                <Image Source="{Binding IconSource}" />
                             </Border>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn CellStyle="{StaticResource DataGridTextBoxColumn}" Width="*"
                                     Binding="{Binding Name}" />
-                <DataGridTemplateColumn Width="*" CellStyle="{StaticResource DataGridTextBoxColumnWeight}"  >
+                <DataGridTemplateColumn Width="*" CellStyle="{StaticResource DataGridTextBoxColumnWeight}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock TextAlignment="Right" Text="{Binding Weight, Converter={StaticResource WeightConvert}}" Margin="0 0 5 0" />
+                            <TextBlock TextAlignment="Right"
+                                       Text="{Binding Weight, Converter={StaticResource WeightConvert}}"
+                                       Margin="0 0 5 0" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
-            <DataGrid.RowDetailsTemplate >
+            <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
                     <Grid Margin="5 -21 5 0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="46"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="46" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Publisher}" />
-                        <TextBlock Grid.Row="0" Grid.Column="2"  Text="{Binding Version}" HorizontalAlignment="Right"/>
-                        <TextBlock Grid.Row="1" Grid.Column="1"  Text="{Binding InstallDate, Converter = {StaticResource DateConvert}}"/>
+                        <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Version}" HorizontalAlignment="Right" />
+                        <TextBlock Grid.Row="1" Grid.Column="1"
+                                   Text="{Binding InstallDate, Converter = {StaticResource DateConvert}}" />
                         <Grid Grid.Row="2" Grid.Column="1" Margin="0 0 0 4">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1*" />
                             </Grid.ColumnDefinitions>
-                            <Button Grid.Column="0" Width="60" Height="30" Content="Uninstall" Style="{StaticResource ButtonModifyApp}"
+                            <Button Grid.Column="0" Width="60" Height="30" Content="Uninstall"
+                                    Style="{StaticResource ButtonModifyApp}"
                                     Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=DataGrid}, Path=  DataContext.UninstallApplicationCommand}"
-                                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=DataGrid}, Path=  DataContext.SelectedRow.UninstallCmd}">
-                            </Button>
-                            <Button Grid.Column="1" Width="60" Height="30" Content="Modify" Style="{StaticResource ButtonModifyApp}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=DataGrid}, Path=  DataContext.SelectedRow.UninstallCmd}" />
+                            <Button Grid.Column="1" Width="60" Height="30" Content="Modify"
+                                    Style="{StaticResource ButtonModifyApp}"
                                     Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=DataGrid}, Path=  DataContext.ModifyApplicationCommand}"
-                                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=DataGrid}, Path=  DataContext.SelectedRow.ModifyPath}">
-                            </Button>
+                                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=DataGrid}, Path=  DataContext.SelectedRow.ModifyPath}" />
                         </Grid>
 
                     </Grid>

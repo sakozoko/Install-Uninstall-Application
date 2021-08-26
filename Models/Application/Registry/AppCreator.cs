@@ -16,7 +16,6 @@ namespace URApplication.Models.Application.Registry
         {
             var applicationModelCollection = new ObservableCollection<ApplicationModel>();
             foreach (var keyParent in registryKeys.Where(keyParent => keyParent is not null))
-            {
                 using (keyParent)
                 {
                     var subKeyNames = keyParent.GetSubKeyNames();
@@ -33,7 +32,6 @@ namespace URApplication.Models.Application.Registry
                         newInstance.Watcher = new AppWatcher(hive, outPath, newInstance);
                     }
                 }
-            }
 
             AppWatcher.Dispatcher = Dispatcher.CurrentDispatcher;
             AppWatcher.Models = applicationModelCollection;
@@ -43,26 +41,28 @@ namespace URApplication.Models.Application.Registry
 
         private static ApplicationModel CreateAppModelFromRegistryKey(RegistryKey key)
         {
+            ApplicationModel newInstance = new();
+            AppModelInitializeFromRegistryKey(newInstance, key);
+            return newInstance;
+        }
+
+        public static void AppModelInitializeFromRegistryKey(ApplicationModel model, RegistryKey key)
+        {
             var path = (string)key.GetValue("DisplayIcon");
             var myBitmap = key.GetValue("WindowsInstaller") is not null && (int)key.GetValue("WindowsInstaller") == 1
                 ? AppIcon.GetIconAppInstaller((string)key.GetValue("DisplayName"))
                 : AppIcon.GetIconApp(path);
-
-            var newInstance = new ApplicationModel
-            {
-                Name = (string)key.GetValue("DisplayName"),
-                IconSource = Imaging.CreateBitmapSourceFromHBitmap(myBitmap.GetHbitmap(), IntPtr.Zero,
-                    Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions()),
-                Version = (string)key.GetValue("DisplayVersion"),
-                InstallDate = (string)key.GetValue("InstallDate"),
-                Publisher = (string)key.GetValue("Publisher"),
-                Weight = key.GetValue("EstimatedSize") is not null
-                    ? int.Parse(key.GetValue("EstimatedSize").ToString() ?? "0")
-                    : 0,
-                UninstallCmd = (string)key.GetValue("UninstallString"),
-                ModifyPath = (string)key.GetValue("ModifyPath")
-            };
-            return newInstance;
+            model.Name = (string)key.GetValue("DisplayName");
+            model.IconSource = Imaging.CreateBitmapSourceFromHBitmap(myBitmap.GetHbitmap(), IntPtr.Zero,
+                Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            model.Version = (string)key.GetValue("DisplayVersion");
+            model.InstallDate = (string)key.GetValue("InstallDate");
+            model.Publisher = (string)key.GetValue("Publisher");
+            model.Weight = key.GetValue("EstimatedSize") is not null
+                ? int.Parse(key.GetValue("EstimatedSize").ToString() ?? "0")
+                : 0;
+            model.UninstallCmd = (string)key.GetValue("UninstallString");
+            model.ModifyPath = (string)key.GetValue("ModifyPath");
         }
     }
 }
