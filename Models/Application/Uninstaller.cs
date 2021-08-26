@@ -15,5 +15,10 @@ namespace URApplication.Models.Application
             });
 
         }
+
+        public static void TryModify(string cmd)
+        {
+            TryUninstall(cmd);
+        }
     }
 }

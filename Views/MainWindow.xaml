@@ -71,8 +71,8 @@
                                     CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=DataGrid}, Path=  DataContext.SelectedRow.UninstallCmd}">
                             </Button>
                             <Button Grid.Column="1" Width="60" Height="30" Content="Modify" Style="{StaticResource ButtonModifyApp}"
-                                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=DataGrid}, Path=  DataContext.UninstallApplicationCommand}"
-                                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=DataGrid}, Path=  DataContext.SelectedRow.UninstallCmd}">
+                                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=DataGrid}, Path=  DataContext.ModifyApplicationCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=DataGrid}, Path=  DataContext.SelectedRow.ModifyPath}">
                             </Button>
                         </Grid>
 

@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using URApplication.Commands;
 using URApplication.Models.Application;
 using URApplication.ViewModels.Base;
@@ -11,8 +10,6 @@ namespace URApplication.ViewModels
     {
         public MainWindowViewModel()
         {
-            UninstallApplicationCommand = new LambdaCommand(OnUninstallApplicationCommandExecute,
-                CanUninstallApplicationCommandExecute);
             InitRowsAsync();
         }
 
@@ -55,11 +52,39 @@ namespace URApplication.ViewModels
 
         #endregion
 
+
         #region InitializeCommand
+
+        #region ModifyApplicationCommand
+        private LambdaCommand _modifyApplicationCommand;
+
+        public LambdaCommand ModifyApplicationCommand => _modifyApplicationCommand ??= new LambdaCommand(OnModifyApplicationCommandExecute,
+                    CanModifyApplicationCommandExecute);
+
+        public bool CanModifyApplicationCommandExecute(object obj)
+        {
+            return obj is not null;
+        }
+
+        private void OnModifyApplicationCommandExecute(object obj)
+        {
+            Uninstaller.TryModify((string)obj);
+        }
+
+        #endregion
 
         #region UninstallApplicationCommand
 
-        public ICommand UninstallApplicationCommand { get; }
+        private LambdaCommand _uninstallApplicationCommand;
+
+        public LambdaCommand UninstallApplicationCommand
+        {
+            get
+            {
+                return _uninstallApplicationCommand ??= new LambdaCommand(OnUninstallApplicationCommandExecute,
+                    CanUninstallApplicationCommandExecute);
+            }
+        }
 
         public bool CanUninstallApplicationCommandExecute(object obj)
         {

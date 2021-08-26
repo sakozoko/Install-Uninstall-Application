@@ -24,6 +24,7 @@ namespace URApplication.Models.Application
                 Microsoft.Win32.Registry.LocalMachine.OpenSubKey(UninstallInLocalMachine),
                 Microsoft.Win32.Registry.CurrentUser.OpenSubKey(UninstallInCurrentUser)
             };
+            
             var applicationModelCollection = AppCreator.GetAppsFromRegistry(registryKeys);
             return applicationModelCollection;
         }

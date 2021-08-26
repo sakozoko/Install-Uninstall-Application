@@ -106,6 +106,21 @@ namespace URApplication.Models.Application
                 OnPropertyChanged(nameof(UninstallCmd));
             }
         }
+        #endregion
+
+        #region ModifyPath
+
+        private string _modifyPath;
+
+        public string ModifyPath
+        {
+            get => _modifyPath;
+            set
+            {
+                _modifyPath = value;
+                OnPropertyChanged(nameof(ModifyPath));
+            }
+        }
 
         #endregion
 

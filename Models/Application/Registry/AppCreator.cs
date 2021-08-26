@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
@@ -14,10 +15,11 @@ namespace URApplication.Models.Application.Registry
         public static ObservableCollection<ApplicationModel> GetAppsFromRegistry(List<RegistryKey> registryKeys)
         {
             var applicationModelCollection = new ObservableCollection<ApplicationModel>();
-            foreach (var keyParent in registryKeys)
+            foreach (var keyParent in registryKeys.Where(keyParent => keyParent is not null))
+            {
                 using (keyParent)
                 {
-                    var subKeyNames = keyParent?.GetSubKeyNames();
+                    var subKeyNames = keyParent.GetSubKeyNames();
                     foreach (var subKeyName in subKeyNames)
                     {
                         using var key = keyParent.OpenSubKey(subKeyName);
@@ -31,6 +33,7 @@ namespace URApplication.Models.Application.Registry
                         newInstance.Watcher = new AppWatcher(hive, outPath, newInstance);
                     }
                 }
+            }
 
             AppWatcher.Dispatcher = Dispatcher.CurrentDispatcher;
             AppWatcher.Models = applicationModelCollection;
@@ -56,7 +59,8 @@ namespace URApplication.Models.Application.Registry
                 Weight = key.GetValue("EstimatedSize") is not null
                     ? int.Parse(key.GetValue("EstimatedSize").ToString() ?? "0")
                     : 0,
-                UninstallCmd = (string)key.GetValue("UninstallString")
+                UninstallCmd = (string)key.GetValue("UninstallString"),
+                ModifyPath = (string)key.GetValue("ModifyPath")
             };
             return newInstance;
         }
