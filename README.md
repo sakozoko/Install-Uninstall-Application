@@ -1,7 +1,7 @@
 ![Screenshot_134](https://user-images.githubusercontent.com/84572791/130516198-2375f327-2512-49e9-b4d3-39123082437a.png)
 
 
-# Install-Uninstall-Application
+# Modify-Uninstall-Application
 
 Created in WPF with MVVM
 
