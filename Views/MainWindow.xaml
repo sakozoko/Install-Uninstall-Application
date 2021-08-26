@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:URApplication.ViewModels"
-        xmlns:convert="clr-namespace:URApplication.ViewModels.Convert"
         xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         mc:Ignorable="d"
 
@@ -13,8 +12,7 @@
         <vm:MainWindowViewModel />
     </Window.DataContext>
     <Window.Resources>
-        <convert:WeightConvert x:Key="WeightConvert" />
-        <convert:DateConvert x:Key="DateConvert" />
+
         <CollectionViewSource Source="{Binding Rows}" x:Key="GridItems">
             <CollectionViewSource.SortDescriptions>
                 <componentModel:SortDescription PropertyName="Name" Direction="Ascending" />
@@ -23,7 +21,7 @@
     </Window.Resources>
     <Grid>
 
-        <DataGrid Padding="0 5" x:Name="GridName" Style="{StaticResource DataGrid}"
+        <DataGrid Padding="0 5" x:Name="GridName" Style="{StaticResource DataGrid}" 
                   ItemsSource="{Binding Source={StaticResource GridItems}, UpdateSourceTrigger=PropertyChanged}"
                   AutoGenerateColumns="False" EnableRowVirtualization="True"
                   SelectionMode="Single" SelectedItem="{Binding SelectedRow}" IsReadOnly="True"
@@ -52,7 +50,7 @@
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
-                    <Grid Margin="5 -21 5 0">
+                    <Grid Margin="5 -21 5 0" Style="{StaticResource RowDetailLoading}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="46" />
                             <ColumnDefinition Width="*" />
@@ -71,6 +69,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*" />
                                 <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="3*" />
                             </Grid.ColumnDefinitions>
                             <Button Grid.Column="0" Width="60" Height="30" Content="Uninstall"
                                     Style="{StaticResource ButtonModifyApp}"
@@ -81,7 +80,6 @@
                                     Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=DataGrid}, Path=  DataContext.ModifyApplicationCommand}"
                                     CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=DataGrid}, Path=  DataContext.SelectedRow.ModifyPath}" />
                         </Grid>
-
                     </Grid>
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>

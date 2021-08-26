@@ -17,6 +17,7 @@
         <Setter Property="VirtualizingPanel.IsContainerVirtualizable" Value="True" />
         <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True" />
         <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling" />
+
     </Style>
     <Style x:Key="DataGridRow" TargetType="DataGridRow">
         <Setter Property="Background" Value="#FF1E1E1E" />
@@ -33,6 +34,20 @@
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Background" Value="#46353535" />
             </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="RowDetailLoading" TargetType="Grid">
+        <Style.Triggers>
+                <DataTrigger Binding="{Binding IsSelected, RelativeSource= {RelativeSource AncestorType=DataGridRow}}" Value="true">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard TargetProperty="Opacity">
+                                <DoubleAnimation To="0" Duration="00:00:00" />
+                                <DoubleAnimation From="0" To="1" Duration="00:00:00.4" BeginTime="00:00:00.3"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                </DataTrigger>
         </Style.Triggers>
     </Style>
 </ResourceDictionary>

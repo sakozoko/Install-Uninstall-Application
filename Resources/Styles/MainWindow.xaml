@@ -1,5 +1,6 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:convert="clr-namespace:URApplication.ViewModels.Convert">
     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
     <SolidColorBrush x:Key="{x:Static SystemColors.ActiveBorderBrush}" Color="Transparent" />
     <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Transparent" />
@@ -12,6 +13,8 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <convert:WeightConvert x:Key="WeightConvert" />
+    <convert:DateConvert x:Key="DateConvert" />
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="MainWindow/DataGrid.xaml" />
         <ResourceDictionary Source="MainWindow/Button.xaml" />
