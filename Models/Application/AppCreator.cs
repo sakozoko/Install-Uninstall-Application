@@ -8,7 +8,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Microsoft.Win32;
 
-namespace URApplication.Models.Application.Registry
+namespace URApplication.Models.Application
 {
     public class AppCreator
     {
@@ -27,7 +27,7 @@ namespace URApplication.Models.Application.Registry
                         var newInstance = CreateAppModelFromRegistryKey(key);
                         applicationModelCollection.Add(newInstance);
 
-                        RegistryEventCreator.DivideRegistryKeyByRegistryKeyAndPath(key, out var hive,
+                        DivideRegistryKeyByRegistryKeyAndPath(key, out var hive,
                             out var outPath);
                         newInstance.Watcher = new AppWatcher(hive, outPath, newInstance);
                     }
@@ -63,6 +63,14 @@ namespace URApplication.Models.Application.Registry
                 : 0;
             model.UninstallCmd = (string)key.GetValue("UninstallString");
             model.ModifyPath = (string)key.GetValue("ModifyPath");
+        }
+
+        private static void DivideRegistryKeyByRegistryKeyAndPath(RegistryKey inKey, out RegistryKey outKey,
+            out string path)
+        {
+            outKey = Registry.LocalMachine;
+            if (!inKey.Name.Contains("LOCAL_MACHINE")) outKey = Registry.CurrentUser;
+            path = inKey.Name[inKey.Name.IndexOf('\\')..].Trim().Replace("\\", "\\\\")[2..];
         }
     }
 }

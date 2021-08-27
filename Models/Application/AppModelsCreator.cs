@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Microsoft.Win32;
-using URApplication.Models.Application.Registry;
 
 namespace URApplication.Models.Application
 {
@@ -21,9 +20,9 @@ namespace URApplication.Models.Application
         {
             var registryKeys = new List<RegistryKey>
             {
-                Microsoft.Win32.Registry.LocalMachine.OpenSubKey(UninstallInLocalMachineWow6432),
-                Microsoft.Win32.Registry.LocalMachine.OpenSubKey(UninstallInLocalMachine),
-                Microsoft.Win32.Registry.CurrentUser.OpenSubKey(UninstallInCurrentUser)
+                Registry.LocalMachine.OpenSubKey(UninstallInLocalMachineWow6432),
+                Registry.LocalMachine.OpenSubKey(UninstallInLocalMachine),
+                Registry.CurrentUser.OpenSubKey(UninstallInCurrentUser)
             };
 
             var applicationModelCollection = AppCreator.GetAppsFromRegistry(registryKeys);

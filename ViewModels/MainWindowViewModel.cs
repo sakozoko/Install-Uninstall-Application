@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using RegistryMonitor;
 using URApplication.Commands;
 using URApplication.Models.Application;
-using URApplication.Models.Application.Registry;
 using URApplication.ViewModels.Base;
 
 namespace URApplication.ViewModels

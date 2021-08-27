@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
 
-namespace URApplication.Models.Application.Registry
+namespace URApplication.Models.Application
 {
     public static class Validation
     {

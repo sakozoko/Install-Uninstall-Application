@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Threading;
 using Microsoft.Win32;
-using URApplication.Models.Application.Registry;
+using RegistryWatcher = RegistryMonitor.RegistryWatcher;
 
 namespace URApplication.Models.Application
 {
