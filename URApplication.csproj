@@ -18,7 +18,8 @@
 
   <ItemGroup>
     <Reference Include="RegistryMonitor">
-      <HintPath>..\..\source\repos\RegistryMonitor\RegistryMonitor\bin\Debug\net5.0\RegistryMonitor.dll</HintPath>
+      <HintPath>Libs\RegistryMonitor.dll</HintPath>
+      <Private>true</Private>
     </Reference>
   </ItemGroup>
 

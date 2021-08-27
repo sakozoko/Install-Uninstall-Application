@@ -1,8 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Threading;
 using Microsoft.Win32;
-using RegistryWatcher = RegistryMonitor.RegistryWatcher;
-
+using RegistryMonitor;
 namespace URApplication.Models.Application
 {
     public class AppWatcher : RegistryWatcher
