@@ -52,12 +52,12 @@ namespace URApplication.Models.Application
             var myBitmap = key.GetValue("WindowsInstaller") is not null && (int)key.GetValue("WindowsInstaller") == 1
                 ? AppIcon.GetIconAppInstaller((string)key.GetValue("DisplayName"))
                 : AppIcon.GetIconApp(path);
-            model.Name = (string)key.GetValue("DisplayName");
+            model.Name = (key.GetValue("DisplayName") is string displayName) ? displayName : null;
             model.IconSource = Imaging.CreateBitmapSourceFromHBitmap(myBitmap.GetHbitmap(), IntPtr.Zero,
                 Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            model.Version = (string)key.GetValue("DisplayVersion");
-            model.InstallDate = (string)key.GetValue("InstallDate");
-            model.Publisher = (string)key.GetValue("Publisher");
+            model.Version = (key.GetValue("DisplayVersion") is string displayVersion) ? displayVersion : null;
+            model.InstallDate = (key.GetValue("InstallDate") is string installDate) ? installDate : null;
+            model.Publisher = (key.GetValue("Publisher") is string publisher) ? publisher : null;
             model.Weight = key.GetValue("EstimatedSize") is not null
                 ? int.Parse(key.GetValue("EstimatedSize").ToString() ?? "0")
                 : 0;
