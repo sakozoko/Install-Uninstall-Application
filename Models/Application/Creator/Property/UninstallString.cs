@@ -5,8 +5,8 @@ namespace URApplication.Models.Application.Creator.Property
 {
     public partial class AppProperties
     {
-    public class UninstallString
-    {
+        public class UninstallString
+        {
             public static string Get(RegistryKey hKey)
             {
                 string res;
@@ -21,6 +21,6 @@ namespace URApplication.Models.Application.Creator.Property
 
                 return res;
             }
-    }
+        }
     }
 }

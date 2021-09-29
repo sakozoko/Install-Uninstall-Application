@@ -121,7 +121,7 @@ namespace URApplication.ViewModels
 
         public bool CanUninstallApplicationCommandExecute(object obj)
         {
-            return obj is not null && (string) obj !="";
+            return obj is not null && (string)obj != "";
         }
 
         private void OnUninstallApplicationCommandExecute(object obj)

@@ -5,24 +5,24 @@ namespace URApplication.Models.Application.Creator.Property
 {
     public partial class AppProperties
     {
-    public class DisplayName
-    {
-        public static string Get(RegistryKey hKey)
+        public class DisplayName
         {
-            string res;
-            try
+            public static string Get(RegistryKey hKey)
             {
-                res = hKey.GetValue(nameof(DisplayName)).ToString();
-                if (res is null or "")
-                    res = "Unnamed";
-            }
-            catch (NullReferenceException)
-            {
-                res = "";
-            }
+                string res;
+                try
+                {
+                    res = hKey.GetValue(nameof(DisplayName)).ToString();
+                    if (res is null or "")
+                        res = "Unnamed";
+                }
+                catch (NullReferenceException)
+                {
+                    res = "";
+                }
 
-            return res;
+                return res;
+            }
         }
-    }
     }
 }

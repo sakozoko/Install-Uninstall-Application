@@ -1,5 +1,4 @@
-﻿
-namespace URApplication.Views
+﻿namespace URApplication.Views
 {
     /// <summary>
     ///     Interaction logic for MainWindow.xaml

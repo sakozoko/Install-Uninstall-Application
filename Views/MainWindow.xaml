@@ -21,7 +21,7 @@
     </Window.Resources>
     <Grid>
 
-        <DataGrid Padding="0 5" x:Name="GridName" Style="{StaticResource DataGrid}" 
+        <DataGrid Padding="0 5" x:Name="GridName" Style="{StaticResource DataGrid}"
                   ItemsSource="{Binding Source={StaticResource GridItems}, UpdateSourceTrigger=PropertyChanged}"
                   AutoGenerateColumns="False" EnableRowVirtualization="True"
                   SelectionMode="Single" SelectedItem="{Binding SelectedRow}" IsReadOnly="True"

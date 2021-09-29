@@ -5,22 +5,22 @@ namespace URApplication.Models.Application.Creator.Property
 {
     public partial class AppProperties
     {
-    public class ModifyPath
-    {
-        public static string Get(RegistryKey hKey)
+        public class ModifyPath
         {
-            string res;
-            try
+            public static string Get(RegistryKey hKey)
             {
-                res = hKey.GetValue(nameof(ModifyPath)).ToString();
-            }
-            catch (NullReferenceException)
-            {
-                res = "";
-            }
+                string res;
+                try
+                {
+                    res = hKey.GetValue(nameof(ModifyPath)).ToString();
+                }
+                catch (NullReferenceException)
+                {
+                    res = "";
+                }
 
-            return res;
+                return res;
+            }
         }
-    }
     }
 }

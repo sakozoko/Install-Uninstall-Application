@@ -25,6 +25,7 @@ namespace URApplication.Models.Application.Creator.Property
                 {
                     res = 0;
                 }
+
                 return res;
             }
         }

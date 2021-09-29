@@ -7,31 +7,33 @@ namespace URApplication.Models.Application.Creator.Property
 {
     public partial class AppProperties
     {
-    public class InstallDate
-    {
-        public static string Get(RegistryKey hKey)
+        public class InstallDate
         {
-            string res;
-            try
+            public static string Get(RegistryKey hKey)
             {
-                if (hKey is null)
-                    throw new ArgumentNullException(nameof(hKey));
-                res = hKey.GetValue(nameof(InstallDate)).ToString();
-                if (res is "")
-                    throw new NullReferenceException();
-            }
-            catch (InvalidCastException)
-            {
-                res = RegistryWatcher.GetRegistryKeyLastWriteTime(hKey).ToString("dd.MM.yy", new DateTimeFormatInfo());
-            }
-            catch (NullReferenceException)
-            {
-                res = RegistryWatcher.GetRegistryKeyLastWriteTime(hKey).ToString("dd.MM.yy", new DateTimeFormatInfo());
-            }
+                string res;
+                try
+                {
+                    if (hKey is null)
+                        throw new ArgumentNullException(nameof(hKey));
+                    res = hKey.GetValue(nameof(InstallDate)).ToString();
+                    if (res is "")
+                        throw new NullReferenceException();
+                }
+                catch (InvalidCastException)
+                {
+                    res = RegistryWatcher.GetRegistryKeyLastWriteTime(hKey)
+                        .ToString("dd.MM.yy", new DateTimeFormatInfo());
+                }
+                catch (NullReferenceException)
+                {
+                    res = RegistryWatcher.GetRegistryKeyLastWriteTime(hKey)
+                        .ToString("dd.MM.yy", new DateTimeFormatInfo());
+                }
 
 
-            return res;
+                return res;
+            }
         }
-    }
     }
 }

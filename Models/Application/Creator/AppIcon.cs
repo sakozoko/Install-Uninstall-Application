@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Microsoft.Win32;
 
 namespace URApplication.Models.Application.Creator
 {
@@ -35,7 +36,7 @@ namespace URApplication.Models.Application.Creator
         {
             var defaultPathLibrary = Environment.GetFolderPath(Environment.SpecialFolder.SystemX86) + PathOfMsInstaller;
             using var iconKey =
-                Microsoft.Win32.Registry.LocalMachine.OpenSubKey(InstallerPathIcons);
+                Registry.LocalMachine.OpenSubKey(InstallerPathIcons);
             var names = iconKey.GetSubKeyNames();
             foreach (var name in names)
             {

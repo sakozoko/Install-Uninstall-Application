@@ -38,16 +38,17 @@
     </Style>
     <Style x:Key="RowDetailLoading" TargetType="Grid">
         <Style.Triggers>
-                <DataTrigger Binding="{Binding IsSelected, RelativeSource= {RelativeSource AncestorType=DataGridRow}}" Value="true">
-                    <DataTrigger.EnterActions>
-                        <BeginStoryboard>
-                            <Storyboard TargetProperty="Opacity">
-                                <DoubleAnimation To="0" Duration="00:00:00" />
-                                <DoubleAnimation From="0" To="1" Duration="00:00:00.4" BeginTime="00:00:00.3"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </DataTrigger.EnterActions>
-                </DataTrigger>
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource= {RelativeSource AncestorType=DataGridRow}}"
+                         Value="true">
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard TargetProperty="Opacity">
+                            <DoubleAnimation To="0" Duration="00:00:00" />
+                            <DoubleAnimation From="0" To="1" Duration="00:00:00.4" BeginTime="00:00:00.3" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+            </DataTrigger>
         </Style.Triggers>
     </Style>
 </ResourceDictionary>
