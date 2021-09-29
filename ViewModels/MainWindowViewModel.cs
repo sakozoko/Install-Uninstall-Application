@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using RegistryMonitor;
 using URApplication.Commands;
 using URApplication.Models.Application;
+using URApplication.Models.Application.Creator;
 using URApplication.ViewModels.Base;
 
 namespace URApplication.ViewModels
@@ -95,7 +96,7 @@ namespace URApplication.ViewModels
 
         public bool CanModifyApplicationCommandExecute(object obj)
         {
-            return obj is not null;
+            return obj is not null && (string)obj != "";
         }
 
         private void OnModifyApplicationCommandExecute(object obj)
@@ -120,7 +121,7 @@ namespace URApplication.ViewModels
 
         public bool CanUninstallApplicationCommandExecute(object obj)
         {
-            return obj is not null;
+            return obj is not null && (string) obj !="";
         }
 
         private void OnUninstallApplicationCommandExecute(object obj)

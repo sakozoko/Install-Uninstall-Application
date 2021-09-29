@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using Microsoft.Win32;
 
-namespace URApplication.Models.Application
+namespace URApplication.Models.Application.Creator
 {
     public class AppModelsCreator : ICreatorApplications
     {

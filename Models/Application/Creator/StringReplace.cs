@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace URApplication.Models
+namespace URApplication.Models.Application.Creator
 {
     public class StringReplace
     {

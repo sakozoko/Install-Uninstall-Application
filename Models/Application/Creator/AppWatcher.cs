@@ -2,7 +2,8 @@
 using System.Windows.Threading;
 using Microsoft.Win32;
 using RegistryMonitor;
-namespace URApplication.Models.Application
+
+namespace URApplication.Models.Application.Creator
 {
     public class AppWatcher : RegistryWatcher
     {

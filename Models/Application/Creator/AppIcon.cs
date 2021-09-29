@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace URApplication.Models.Application
+namespace URApplication.Models.Application.Creator
 {
     public class AppIcon
     {

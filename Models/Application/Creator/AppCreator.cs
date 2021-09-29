@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Microsoft.Win32;
+using URApplication.Models.Application.Creator.Property;
 
-namespace URApplication.Models.Application
+namespace URApplication.Models.Application.Creator
 {
     public class AppCreator
     {
@@ -48,21 +45,14 @@ namespace URApplication.Models.Application
 
         public static void AppModelInitializeFromRegistryKey(ApplicationModel model, RegistryKey key)
         {
-            var path = (string)key.GetValue("DisplayIcon");
-            var myBitmap = key.GetValue("WindowsInstaller") is not null && (int)key.GetValue("WindowsInstaller") == 1
-                ? AppIcon.GetIconAppInstaller((string)key.GetValue("DisplayName"))
-                : AppIcon.GetIconApp(path);
-            model.Name = (key.GetValue("DisplayName") is string displayName) ? displayName : null;
-            model.IconSource = Imaging.CreateBitmapSourceFromHBitmap(myBitmap.GetHbitmap(), IntPtr.Zero,
-                Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            model.Version = (key.GetValue("DisplayVersion") is string displayVersion) ? displayVersion : null;
-            model.InstallDate = (key.GetValue("InstallDate") is string installDate) ? installDate : null;
-            model.Publisher = (key.GetValue("Publisher") is string publisher) ? publisher : null;
-            model.Weight = key.GetValue("EstimatedSize") is not null
-                ? int.Parse(key.GetValue("EstimatedSize").ToString() ?? "0")
-                : 0;
-            model.UninstallCmd = (string)key.GetValue("UninstallString");
-            model.ModifyPath = (string)key.GetValue("ModifyPath");
+            model.Name = AppProperties.DisplayName.Get(key);
+            model.IconSource = AppProperties.IconSource.Get(key);
+            model.Version = AppProperties.DisplayVersion.Get(key);
+            model.InstallDate = AppProperties.InstallDate.Get(key);
+            model.Publisher = AppProperties.Publisher.Get(key);
+            model.Weight = AppProperties.EstimatedSize.Get(key);
+            model.UninstallCmd = AppProperties.UninstallString.Get(key);
+            model.ModifyPath = AppProperties.ModifyPath.Get(key);
         }
 
         private static void DivideRegistryKeyByRegistryKeyAndPath(RegistryKey inKey, out RegistryKey outKey,
