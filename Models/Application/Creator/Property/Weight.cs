@@ -12,7 +12,7 @@ namespace URApplication.Models.Application.Creator.Property
                 int res;
                 try
                 {
-                    if (hKey.GetValue(nameof(EstimatedSize)) is null or "")
+                    if (hKey.GetValue(nameof(EstimatedSize)).ToString() is null or "")
                         throw new ArgumentNullException();
                     // ReSharper disable once AssignNullToNotNullAttribute
                     res = int.Parse(hKey.GetValue(nameof(EstimatedSize)).ToString());
